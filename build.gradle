@@ -1,0 +1,47 @@
+allprojects {
+    apply plugin: 'java'
+    group = 'xyz.defe.cache'
+    version = '1.0'
+
+	repositories {
+		mavenLocal()
+	    mavenCentral()
+	}
+
+    dependencies {
+        implementation 'com.esotericsoftware:kryo:5.0.0-RC8'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+        //testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    }
+}
+
+project(':cache-server') {
+    dependencies {
+        implementation project(':cache-common')
+    }
+}
+
+project(':cache-client') {
+    dependencies {
+        implementation project(':cache-common')
+    }
+}
+
+configurations {
+    childJars
+}
+
+dependencies {
+    subprojects.each {
+        childJars project(it.path)
+    }
+}
+
+jar {
+    dependsOn configurations.childJars
+    from { configurations.childJars.collect { zipTree(it) } }
+}
+
+test {
+    useJUnitPlatform()
+}
