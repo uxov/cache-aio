@@ -98,7 +98,7 @@ public class MessageHandler {
             message = future.get(options.getRequestTimeOut(), TimeUnit.SECONDS);
         } catch (TimeoutException te) {
             wait.set(false);
-            log.info("request time out");
+            log.info("request timeout");
         } catch (Exception e) {
             wait.set(false);
             e.printStackTrace();
