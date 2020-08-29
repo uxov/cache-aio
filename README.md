@@ -23,7 +23,7 @@ CacheClient client = new CacheClient("127.0.0.1", 9120);
 String key = "testStr";
 String str = "test cache client";
 
-client.put(key,  str);
+client.put(key, str);
 Set<String> keys = client.getKeys();
 String val = (String) client.get(key);
 client.delete(key);
