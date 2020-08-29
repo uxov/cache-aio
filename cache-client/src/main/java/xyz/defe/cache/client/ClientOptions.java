@@ -7,7 +7,7 @@ public class ClientOptions {
     private int initPooSize = 100;
     private int maxPoolSize = 1000;
     private int increaseCount = 100;
-    final int poolCheckPeriod = 60000 * 15;   //minutes
+    final int poolCheckPeriod = 60000 * 15;   //seconds
 
     public String getIp() {
         return ip;
