@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 public class ChannelHandlerImpl implements ChannelHandler {
     static final int INT_BYTES = Integer.BYTES;
+    private final Serializer serializer = new KryoSerializer();
     private final Logger log = Logger.getLogger(this.getClass().getName());
 
     public void read(AsynchronousSocketChannel channel, CompleteMessageHandler completeMessageHandler) {
@@ -33,7 +34,7 @@ public class ChannelHandlerImpl implements ChannelHandler {
                             if (messageBuf.position() == dataLength) {  //when get complete message data
                                 try {
                                     messageBuf.flip();
-                                    completeMessageHandler.process(KryoUtil.deserialize(messageBuf.array()), channel);
+                                    completeMessageHandler.process(serializer.deserialize(messageBuf.array()), channel);
                                 } catch (Exception e) {
                                     completeMessageHandler.failed(e);
                                 }
@@ -68,7 +69,7 @@ public class ChannelHandlerImpl implements ChannelHandler {
     }
 
     public <T> void write(AsynchronousSocketChannel channel, T object, ActionAfterWriteMessage actionAfterWriteMessage) {
-        byte[] bytes = KryoUtil.serialize(object);
+        byte[] bytes = serializer.serialize(object);
         ByteBuffer buffer = ByteBuffer.allocate(INT_BYTES + bytes.length);
         buffer.putInt(bytes.length);
         buffer.put(bytes);
